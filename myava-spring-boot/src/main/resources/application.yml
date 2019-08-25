@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: myava-spring-boot
+
+regCenter:
+  serverList: 127.0.0.1:2181
+  namespace: demo-elastic-job
