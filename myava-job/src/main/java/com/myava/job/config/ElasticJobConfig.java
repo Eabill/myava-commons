@@ -20,8 +20,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Map;
-
 /**
  * elastic-job配置
  *
@@ -39,6 +37,11 @@ public class ElasticJobConfig implements ApplicationContextAware, InitializingBe
 
     private ApplicationContext applicationContext;
 
+    @Bean(initMethod = "init")
+    public ZookeeperRegistryCenter regCenter() {
+        return new ZookeeperRegistryCenter(new ZookeeperConfiguration(serverList, namespace));
+    }
+
     @Bean
     public ElasticJobListener jobListener() {
         return new JobListener();
@@ -51,15 +54,12 @@ public class ElasticJobConfig implements ApplicationContextAware, InitializingBe
 
     @Override
     public void afterPropertiesSet() {
-        ZookeeperRegistryCenter regCenter = new ZookeeperRegistryCenter(new ZookeeperConfiguration(serverList, namespace));
-        regCenter.init();
-        Map<String, SimpleJob> jobMap = applicationContext.getBeansOfType(SimpleJob.class);
-        jobMap.forEach((key, simpleJob) -> {
+        applicationContext.getBeansOfType(SimpleJob.class).forEach((key, simpleJob) -> {
             JobScheduled elasticSimpleJobAnnotation = simpleJob.getClass().getAnnotation(JobScheduled.class);
             String cron = StringUtils.defaultIfBlank(elasticSimpleJobAnnotation.cron(), elasticSimpleJobAnnotation.value());
             SimpleJobConfiguration simpleJobConfiguration = new SimpleJobConfiguration(JobCoreConfiguration.newBuilder(simpleJob.getClass().getName(), cron, elasticSimpleJobAnnotation.shardingTotalCount()).shardingItemParameters(elasticSimpleJobAnnotation.shardingItemParameters()).build(), simpleJob.getClass().getCanonicalName());
             LiteJobConfiguration liteJobConfiguration = LiteJobConfiguration.newBuilder(simpleJobConfiguration).overwrite(true).build();
-            SpringJobScheduler jobScheduler = new SpringJobScheduler(simpleJob, regCenter, liteJobConfiguration, jobListener());
+            SpringJobScheduler jobScheduler = new SpringJobScheduler(simpleJob, regCenter(), liteJobConfiguration, jobListener());
             jobScheduler.init();
         });
     }
