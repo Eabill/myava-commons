@@ -55,10 +55,11 @@ public class ElasticJobConfig implements ApplicationContextAware, InitializingBe
     @Override
     public void afterPropertiesSet() {
         applicationContext.getBeansOfType(SimpleJob.class).forEach((key, simpleJob) -> {
-            JobScheduled elasticSimpleJobAnnotation = simpleJob.getClass().getAnnotation(JobScheduled.class);
-            String cron = StringUtils.defaultIfBlank(elasticSimpleJobAnnotation.cron(), elasticSimpleJobAnnotation.value());
-            SimpleJobConfiguration simpleJobConfiguration = new SimpleJobConfiguration(JobCoreConfiguration.newBuilder(simpleJob.getClass().getName(), cron, elasticSimpleJobAnnotation.shardingTotalCount()).shardingItemParameters(elasticSimpleJobAnnotation.shardingItemParameters()).build(), simpleJob.getClass().getCanonicalName());
-            LiteJobConfiguration liteJobConfiguration = LiteJobConfiguration.newBuilder(simpleJobConfiguration).overwrite(true).build();
+            JobScheduled jobScheduled = simpleJob.getClass().getAnnotation(JobScheduled.class);
+            String jobName = StringUtils.defaultIfBlank(jobScheduled.jobName(), simpleJob.getClass().getName());
+            String cron = StringUtils.defaultIfBlank(jobScheduled.cron(), jobScheduled.value());
+            SimpleJobConfiguration simpleJobConfiguration = new SimpleJobConfiguration(JobCoreConfiguration.newBuilder(jobName, cron, jobScheduled.shardingTotalCount()).shardingItemParameters(jobScheduled.shardingItemParameters()).build(), simpleJob.getClass().getCanonicalName());
+            LiteJobConfiguration liteJobConfiguration = LiteJobConfiguration.newBuilder(simpleJobConfiguration).overwrite(jobScheduled.overwrite()).disabled(jobScheduled.disabled()).build();
             SpringJobScheduler jobScheduler = new SpringJobScheduler(simpleJob, regCenter(), liteJobConfiguration, jobListener());
             jobScheduler.init();
         });

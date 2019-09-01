@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8888
 
 spring:
   application:
@@ -8,3 +8,8 @@ spring:
 regCenter:
   serverList: 127.0.0.1:2181
   namespace: demo-elastic-job
+
+# will inject 'application' namespace in bootstrap phase
+apollo.bootstrap.enabled: true
+# put apollo initialization before logging system initialization
+#apollo.bootstrap.eagerLoad.enabled=true

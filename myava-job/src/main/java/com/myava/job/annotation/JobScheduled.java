@@ -32,8 +32,6 @@ public @interface JobScheduled {
 
     String jobParameter() default "";
 
-    String dataSource() default "";
-
     String description() default "";
 
     boolean disabled() default false;

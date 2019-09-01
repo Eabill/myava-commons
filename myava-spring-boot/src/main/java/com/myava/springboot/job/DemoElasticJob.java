@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @author biao
  */
 @Component
-@JobScheduled(cron = "0 0/1 * * * ?"/*, disabled = true*/)
+@JobScheduled(cron = "0 0/1 * * * ?", disabled = true)
 public class DemoElasticJob implements SimpleJob {
 
     private static final Logger LOG = LoggerFactory.getLogger(DemoElasticJob.class);
