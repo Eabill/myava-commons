@@ -1,15 +1,47 @@
 server:
   port: 8888
 
+logging:
+  config: classpath:logback-spring.xml
+  path: /data/logs/${spring.application.name}
+
 spring:
   application:
     name: myava-spring-boot
+  profiles:
+    active: default
+  datasource.druid:
+    name: myava-ds
+    url: jdbc:mysql://rm-wz9npyfwf9pr96954ao.mysql.rds.aliyuncs.com:3306/oxygenerator?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useServerPrepStmts=true
+    username: root
+    password: aliyun_rds123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    initial-size: 1
+    min-idle: 1
+    max-active: 20
+    max-wait: 60000
+    time-between-eviction-runs-millis: 60000
+    min-evictable-idle-time-millis: 300000
+    validation-query: SELECT 'x'
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    pool-prepared-statements: false
+    max-pool-prepared-statement-per-connection-size: 20
 
-regCenter:
-  serverList: 127.0.0.1:2181
-  namespace: demo-elastic-job
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+#regCenter:
+#  serverList: 127.0.0.1:2181
+#  namespace: demo-elastic-job
 
 # will inject 'application' namespace in bootstrap phase
-apollo.bootstrap.enabled: true
+#apollo.bootstrap.enabled: true
 # put apollo initialization before logging system initialization
 #apollo.bootstrap.eagerLoad.enabled=true
+

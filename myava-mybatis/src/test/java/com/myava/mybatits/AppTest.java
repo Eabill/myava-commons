@@ -1,4 +1,4 @@
-package com.myava.job;
+package com.myava.mybatits;
 
 import static org.junit.Assert.assertTrue;
 

@@ -1,4 +1,4 @@
-package com.myava.job;
+package com.myava.mybatits;
 
 /**
  * Hello world!
