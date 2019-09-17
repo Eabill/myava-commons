@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    
+    <properties resource="gen-config.properties" />
+    
+    <context id="default" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+    	<!-- 生成toString方法 -->
+        <!-- <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/> -->
+        <!-- 生成equals和hashCode方法 -->
+        <!-- <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/> -->
+        <!-- 实现序列化接口，生成serialVersionUID属性 -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!-- 生成lombok代码 -->
+        <plugin type="org.mybatis.generator.plugins.LombokPlugin">
+            <property name="clientSuperInterfaceName" value="${javaClient.superInterfaceName}"/>
+            <property name="javaModelPackageName" value="${javaModel.targetPackage}"/>
+        </plugin>
+        
+        <commentGenerator type="org.mybatis.generator.internal.CustomCommentGenerator">
+        	<property name="suppressAllComments" value="false"/>
+            <property name="suppressDate" value="true" />
+            <property name="addRemarkComments" value="true" />
+        </commentGenerator>
+        
+        <jdbcConnection driverClass="${driverClassName}" connectionURL="${mysql.url}" 
+        	userId="${mysql.username}" password="${mysql.password}">
+        	<!-- 设置获取TABLES REMARKS信息 -->
+        	<property name="remarks" value="true" />
+        	<property name="useInformationSchema" value="true" />
+        </jdbcConnection>
+        
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        
+        <!-- 生成model类 -->
+        <javaModelGenerator targetPackage="${javaModel.targetPackage}" targetProject="${java.targetProject}">
+            <property name="constructorBased" value="false"/>
+            <property name="useActualColumnNames" value="true" />
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        
+        <!-- 生成sqlMap.xml文件 -->
+        <sqlMapGenerator targetPackage="${sqlMap.targetPackage}" targetProject="${resoures.targetProject}">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+        
+        <!-- 生成mapper接口 -->
+        <javaClientGenerator targetPackage="${javaClient.targetPackage}" targetProject="${java.targetProject}" type="XMLMAPPER">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        
+        <!-- maven goals[clean install mybatis-generator:generate] -->
+        <!-- PS: 配置table需谨慎，存在时会追加内容或重新覆盖  -->
+        <table tableName="email_notify_err_log" domainObjectName="EmailNotifyErrLog" mapperName="EmailNotifyErrLogMapper" />
+    </context>
+    
+</generatorConfiguration>
