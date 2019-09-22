@@ -1,27 +1,35 @@
 package com.myava.springboot.controller;
 
-import com.myava.springboot.model.Test;
-import com.myava.springboot.service.TestService;
+import com.myava.springboot.entity.User;
+import com.myava.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-@RestController
+/**
+ * 入口控制器
+ *
+ * @author biao
+ */
+@Controller
 public class IndexController {
 
     @Autowired
-    private TestService testService;
+    private UserService userService;
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String index() {
-        return "Hello, spring boot!";
+        return "index";
     }
 
     @RequestMapping("/list")
-    public List<Test> list() {
-        return testService.queryList();
+    @ResponseBody
+    public List<User> list() {
+        return userService.selectAll();
     }
 
 }

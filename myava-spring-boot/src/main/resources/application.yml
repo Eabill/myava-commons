@@ -12,9 +12,9 @@ spring:
     active: default
   datasource.druid:
     name: myava-ds
-    url: jdbc:mysql://rm-wz9npyfwf9pr96954ao.mysql.rds.aliyuncs.com:3306/oxygenerator?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useServerPrepStmts=true
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useServerPrepStmts=true&serverTimezone=Asia/Shanghai
     username: root
-    password: aliyun_rds123456
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
@@ -31,29 +31,19 @@ spring:
     pool-prepared-statements: false
     max-pool-prepared-statement-per-connection-size: 20
 
-# MQTT-配置信息
-spring.mqtt.userName: mosquitto
-# MQTT-密码
-spring.mqtt.password: mosquitto123456
-# MQTT-服务器地址，多个以英文逗号隔开，如：tcp://127.0.0.1:1883,tcp://192.168.2.133:1883
-spring.mqtt.url: tcp://47.106.167.93:1883
-# MQTT-默认客户端ID
-spring.mqtt.qos: 1
-# MQTT-默认客户端ID
-spring.mqtt.client-id: mqttId_inbound
-# MQTT-默认消息主题
-spring.mqtt.default-topic: topic
-# MQTT-连接超时时间
-spring.mqtt.completionTimeout: 3000
-# MQTT-会话心跳时间，单位为秒
-spring.mqtt.keepAliveInterval: 20
-# MQTT-topic
-spring.mqtt.topic: product/+/data/post
-
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+
+spring.thymeleaf:
+  enabled: true
+  prefix: classpath:/templates/
+  suffix: .html
+  mode: HTML5
+  encoding: UTF-8
+  cache: false
+  servlet.content-type: text/html
 
 #regCenter:
 #  serverList: 127.0.0.1:2181
