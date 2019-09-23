@@ -55,7 +55,12 @@
         
         <!-- maven goals[clean install mybatis-generator:generate] -->
         <!-- PS: 配置table需谨慎，存在时会追加内容或重新覆盖  -->
-        <table tableName="t_user" domainObjectName="User" mapperName="UserMapper" />
+        <table tableName="device_run_record_daily" domainObjectName="DeviceRunRecordDaily" mapperName="DeviceRunRecordDailyMapper" />
+        <table tableName="customer_info" domainObjectName="CustomerInfo" mapperName="CustomerInfoMapper" />
+        <table tableName="data_dict" domainObjectName="DataDict" mapperName="DataDictMapper" />
+        <table tableName="device_info" domainObjectName="DeviceInfo" mapperName="DeviceInfoMapper" />
+        <table tableName="device_run_record" domainObjectName="DeviceRunRecord" mapperName="DeviceRunRecordMapper" />
+        <table tableName="wx_user_device_relation" domainObjectName="WxUserDeviceRelation" mapperName="WxUserDeviceRelationMapper" />
     </context>
     
 </generatorConfiguration>
