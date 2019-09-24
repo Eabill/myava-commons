@@ -1,5 +1,12 @@
 package com.myava.base.util;
 
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
+
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+
 /**
  * Twitter分布式自增ID雪花算法
  *
@@ -45,7 +52,9 @@ public class SnowflakeIdWorker {
     /** 上次生成ID时间截 */
     private long lastTimestamp = -1L;
 
-    public SnowflakeIdWorker(long workerId, long datacenterId) {
+    private static SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker(getWorkId(), getDataCenterId());
+
+    private SnowflakeIdWorker(long workerId, long datacenterId) {
         if (workerId > maxWorkerId || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
         }
@@ -56,7 +65,11 @@ public class SnowflakeIdWorker {
         this.datacenterId = datacenterId;
     }
 
-    public synchronized long nextId() {
+    public static long nextId() {
+        return snowflakeIdWorker.getNextId();
+    }
+
+    private synchronized long getNextId() {
         long timestamp = timeGen();
         // 若当前时间小于上一次ID生成时间戳，说明系统时钟回退过抛出异常
         if (timestamp < lastTimestamp) {
@@ -88,10 +101,40 @@ public class SnowflakeIdWorker {
         return System.currentTimeMillis();
     }
 
+    /**
+     * 获取机器ID
+     * @return
+     */
+    private static Long getWorkId() {
+        try {
+            String hostAddress = Inet4Address.getLocalHost().getHostAddress();
+            int[] ints = StringUtils.toCodePoints(hostAddress);
+            int sums = 0;
+            for (int b : ints) {
+                sums += b;
+            }
+            return (long) (sums % 32);
+        } catch (UnknownHostException e) {
+            return RandomUtils.nextLong(0, 31);
+        }
+    }
+
+    /**
+     * 获取数据中心ID
+     * @return
+     */
+    private static Long getDataCenterId() {
+        int[] ints = StringUtils.toCodePoints(SystemUtils.getHostName());
+        int sums = 0;
+        for (int i : ints) {
+            sums += i;
+        }
+        return (long) (sums % 32);
+    }
+
     public static void main(String[] args) {
-        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
         for (int i = 0; i < 1000; i++) {
-            System.out.println(idWorker.nextId());
+            System.out.println(SnowflakeIdWorker.nextId());
         }
     }
 }

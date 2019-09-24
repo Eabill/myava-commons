@@ -1,14 +1,13 @@
 package com.myava.base.enums;
 
 /**
- * 是否枚举
+ * 通用是否枚举类
  *
  * @author biao
  */
 public enum YesOrNo {
 
-    NO(0, "否"),
-    YES(1, "是");
+    NO(0, "否"), YES(1, "是");
 
     private Integer code;
 
