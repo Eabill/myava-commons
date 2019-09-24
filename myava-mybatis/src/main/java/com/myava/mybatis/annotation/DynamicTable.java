@@ -38,5 +38,5 @@ public @interface DynamicTable {
      * 连接符
      * @return
      */
-    String symbol() default "-";
+    String symbol() default "_";
 }

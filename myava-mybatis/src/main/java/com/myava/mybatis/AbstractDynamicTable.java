@@ -26,6 +26,9 @@ public abstract class AbstractDynamicTable implements IDynamicTableName {
             DynamicTable dynamicTable = this.getClass().getAnnotation(DynamicTable.class);
             Field field = this.getClass().getDeclaredField(dynamicTable.field());
             field.setAccessible(true);
+            if (tableName != null || field.get(this) == null) {
+                return tableName;
+            }
             int tabInx = Math.abs(field.get(this).hashCode()) % dynamicTable.capacity();
             return dynamicTable.prefix() + dynamicTable.symbol() + tabInx;
         } catch (Exception ex) {
