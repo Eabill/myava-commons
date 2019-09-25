@@ -16,6 +16,7 @@
         <module>myava-base</module>
         <module>myava-job</module>
         <module>myava-mybatis</module>
+        <module>myava-redis</module>
     </modules>
     <packaging>pom</packaging>
 
