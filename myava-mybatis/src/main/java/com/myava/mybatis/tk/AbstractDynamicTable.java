@@ -1,6 +1,6 @@
-package com.myava.mybatis;
+package com.myava.mybatis.tk;
 
-import com.myava.mybatis.annotation.DynamicTable;
+import com.myava.mybatis.annotation.tk.DynamicTable;
 import lombok.Getter;
 import lombok.Setter;
 import tk.mybatis.mapper.entity.IDynamicTableName;
