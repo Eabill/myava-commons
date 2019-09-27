@@ -11,6 +11,8 @@ import java.util.Date;
  */
 public class DateUtil extends DateUtils {
 
+    public static final String DATE_TIME_SIMPLE_PATTERN = "yyyyMMddHHmmss";
+
     /**
      * 获取两个时间相差分钟数
      *
@@ -30,7 +32,7 @@ public class DateUtil extends DateUtils {
      * @return
      */
     public static long getDiffSeconds(Date d1, Date d2) {
-        return Math.abs((d2.getTime() - d1.getTime()) / 1000);
+        return (d2.getTime() - d1.getTime()) / 1000;
     }
 
 }

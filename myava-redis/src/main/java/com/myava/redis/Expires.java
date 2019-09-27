@@ -9,6 +9,8 @@ public class Expires {
 
     public static final int PERMANENT = -1;
 
+    public static final int IN_30SECOND = 1 * 30;
+
     public static final int IN_1MINUTE = 1 * 60;
 
     public static final int IN_5MINUTE = 5 * 60;
