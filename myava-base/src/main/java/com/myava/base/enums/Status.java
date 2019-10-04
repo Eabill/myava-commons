@@ -11,6 +11,7 @@ public enum Status {
     ERR_400(400, "参数错误"),
     ERR_401(401, "没有权限"),
     ERR_403(403, "禁止访问"),
+    ERR_404(404, "资源不存在"),
     ERR_500(500, "系统繁忙");
 
     private Integer code;
