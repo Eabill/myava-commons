@@ -55,7 +55,7 @@
         
         <!-- maven goals[clean install mybatis-generator:generate] -->
         <!-- PS: 配置table需谨慎，存在时会追加内容或重新覆盖  -->
-        <table tableName="data_handle_err_log" />
+        <table tableName="device_supplier" domainObjectName="DeviceSupplierEntity" mapperName="DeviceSupplierMapper" />
     </context>
     
 </generatorConfiguration>
