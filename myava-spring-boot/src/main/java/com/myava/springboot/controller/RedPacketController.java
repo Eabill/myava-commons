@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,27 +33,28 @@ public class RedPacketController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    private DefaultRedisScript<RedPacketReceive> redPacketScript;
+    private DefaultRedisScript<String> redPacketScript;
     private static final String KEY_PREFIX = "market:{redPacket}:";
 
     @PostConstruct
     public void init() {
         redPacketScript = new DefaultRedisScript<>();
-        redPacketScript.setResultType(RedPacketReceive.class);
+        redPacketScript.setResultType(String.class);
         redPacketScript.setLocation(new ClassPathResource("script/red-packet.lua"));
     }
 
     @RequestMapping("/redPacket/init")
     @ResponseBody
-    public String initRedPacket() throws ParseException {
+    public String initRedPacket(String totalAmt, int totalNum) throws ParseException {
+        Date now = new Date();
         RedPacketInfo info = RedPacketInfo.builder()
                 .id(1L)
                 .redPacketName("双11红包")
                 .redPacketNo("20191111001")
-                .totalAmount(new BigDecimal("100"))
-                .totalNumber(10)
-                .startDate(DateUtil.parseDate("2019-11-11", DateUtil.DATE_PATTERN))
-                .endDate(DateUtil.parseDate("2019-11-12", DateUtil.DATE_PATTERN))
+                .totalAmount(new BigDecimal(totalAmt))
+                .totalNumber(totalNum)
+                .startDate(now)
+                .endDate(DateUtil.addDays(now, 1))
                 .build();
         RemainRedPacket remainRedPacket = new RemainRedPacket();
         remainRedPacket.setRemainNum(info.getTotalNumber());
@@ -91,9 +94,16 @@ public class RedPacketController {
     @RequestMapping("/redPacket/dis")
     @ResponseBody
     public void redPacket(Integer redPacketId, Integer userId) {
-        RedPacketReceive result = (RedPacketReceive) redisTemplate.execute(redPacketScript, Lists.newArrayList(KEY_PREFIX), redPacketId, userId);
-        if (result == null) {
-            System.out.println("This user is consuemd.");
+
+        String result = (String) redisTemplate.execute(redPacketScript,
+                new StringRedisSerializer(), new StringRedisSerializer(),
+                Lists.newArrayList(KEY_PREFIX), String.valueOf(redPacketId), String.valueOf(userId));
+        if (result == "RECEIVED") {
+            System.out.println("This user has received.");
+            return;
+        }
+        if (result == "NOT_HAVE_RED_PACKET") {
+            System.out.println("Not have red packet.");
             return;
         }
         System.out.println("result: " + result);

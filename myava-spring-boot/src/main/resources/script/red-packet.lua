@@ -8,7 +8,7 @@ local key = KEYS[1]..ARGV[1]
 local listKey = key..':list'
 local recKey = key..':received'
 if redis.call('sadd', recKey, ARGV[2]) == 0 then
-    return nil
+    return 'RECEIVED'
 else
     local _redPacket = redis.call('rpop', listKey)
     if _redPacket then
@@ -24,4 +24,4 @@ else
         return cjson.encode(redPacket)
     end
 end
-return nil
+return 'NOT_HAVE_RED_PACKET'
