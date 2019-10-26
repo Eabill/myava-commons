@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@EnableScheduling
+//@EnableScheduling
 @SpringBootApplication(scanBasePackages = { "com.myava" })
 @MapperScan("com.myava.springboot.mapper")
 public class MyavaSpringBootApplication {
