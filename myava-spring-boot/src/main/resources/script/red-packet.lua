@@ -7,11 +7,12 @@
 local key = KEYS[1]..ARGV[1]
 local listKey = key..':list'
 local recKey = key..':received'
-if redis.call('sadd', recKey, ARGV[2]) == 0 then
+if redis.call('sismember', recKey, ARGV[2]) == 1 then
     return 'RECEIVED'
 else
     local _redPacket = redis.call('rpop', listKey)
     if _redPacket then
+        redis.call('sadd', recKey, ARGV[2])
         local redPacket = cjson.decode(_redPacket)
         redPacket['userId'] = ARGV[2]
         local _remain = redis.call('get', key)

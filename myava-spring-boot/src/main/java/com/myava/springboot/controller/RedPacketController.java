@@ -31,7 +31,7 @@ import java.util.List;
 public class RedPacketController {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     private DefaultRedisScript<String> redPacketScript;
     private static final String KEY_PREFIX = "market:{redPacket}:";
@@ -95,7 +95,7 @@ public class RedPacketController {
     @ResponseBody
     public void redPacket(Integer redPacketId, Integer userId) {
 
-        String result = (String) redisTemplate.execute(redPacketScript,
+        String result = redisTemplate.execute(redPacketScript,
                 new StringRedisSerializer(), new StringRedisSerializer(),
                 Lists.newArrayList(KEY_PREFIX), String.valueOf(redPacketId), String.valueOf(userId));
         if (result == "RECEIVED") {
