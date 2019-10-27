@@ -2,6 +2,7 @@ package com.myava.springboot.controller;
 
 import com.google.common.collect.Lists;
 import com.myava.base.util.DateUtil;
+import com.myava.redis.RedisLock;
 import com.myava.springboot.entity.RedPacketInfo;
 import com.myava.springboot.entity.RedPacketReceive;
 import com.myava.springboot.entity.RemainRedPacket;
@@ -23,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 红包控制器，基于redis lua实现
+ * 红包控制器，基于redis lua或redis锁实现
  *
  * @author biao
  */
@@ -93,7 +94,7 @@ public class RedPacketController {
 
     @RequestMapping("/redPacket/dis")
     @ResponseBody
-    public void redPacket(Integer redPacketId, Integer userId) {
+    public void redPacket(long redPacketId, long userId) {
 
         String result = redisTemplate.execute(redPacketScript,
                 new StringRedisSerializer(), new StringRedisSerializer(),
@@ -109,6 +110,42 @@ public class RedPacketController {
         System.out.println("result: " + result);
         RemainRedPacket remainRedPacket = (RemainRedPacket) redisTemplate.opsForValue().get(KEY_PREFIX + redPacketId);
         System.out.println("remainRedPacket: " + remainRedPacket);
+    }
+
+    @RequestMapping("/redPacket/dis/lock")
+    @ResponseBody
+    public void redPacketLock(long redPacketId, long userId) {
+        RedisLock redisLock = new RedisLock("market:redPacket:" + redPacketId);
+        if (!redisLock.lock()) {
+            System.out.println("Get lock error.");
+        }
+        try {
+            String key = KEY_PREFIX + redPacketId;
+            String recKey = key + ":received";
+            String listKey = key + ":list";
+            Boolean member = redisTemplate.opsForSet().isMember(recKey, userId);
+            if (member) {
+                System.out.println("This user has received.");
+                return;
+            }
+            RedPacketReceive redPacketReceive = (RedPacketReceive) redisTemplate.opsForList().rightPop(listKey);
+            if (redPacketReceive == null) {
+                System.out.println("Not have red packet.");
+                return;
+            }
+            redPacketReceive.setUserId(userId);
+            System.out.println("result: " + redPacketReceive);
+            redisTemplate.opsForSet().add(recKey, userId);
+            RemainRedPacket remainRedPacket = (RemainRedPacket) redisTemplate.opsForValue().get(key);
+            remainRedPacket.setRemainNum(remainRedPacket.getRemainNum() - 1);
+            remainRedPacket.setRemainAmt(remainRedPacket.getRemainAmt() - redPacketReceive.getAmount());
+            redisTemplate.opsForValue().set(key, remainRedPacket);
+            System.out.println("remainRedPacket: " + remainRedPacket);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            redisLock.unlock();
+        }
     }
 
 }
