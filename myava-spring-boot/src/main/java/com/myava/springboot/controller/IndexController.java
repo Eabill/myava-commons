@@ -1,6 +1,6 @@
 package com.myava.springboot.controller;
 
-import com.myava.springboot.entity.User;
+import com.myava.springboot.entity.UserEntity;
 import com.myava.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ public class IndexController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public List<User> list() {
+    public List<UserEntity> list() {
         return userService.selectAll();
     }
 

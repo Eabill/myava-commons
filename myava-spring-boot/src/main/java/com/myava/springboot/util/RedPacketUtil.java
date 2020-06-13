@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 红包实用类
+ *
+ * @author biao
+ */
 public class RedPacketUtil {
 
     private static Random random = new Random();

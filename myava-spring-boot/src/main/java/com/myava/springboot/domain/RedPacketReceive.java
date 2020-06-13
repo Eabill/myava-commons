@@ -1,4 +1,4 @@
-package com.myava.springboot.entity;
+package com.myava.springboot.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,9 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * 红包领取对象
+ *
+ * @author biao
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

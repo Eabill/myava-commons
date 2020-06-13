@@ -1,8 +1,8 @@
 package com.myava.springboot.controller;
 
 import com.google.common.collect.Lists;
-import com.myava.springboot.entity.RedPacketReceive;
-import com.myava.springboot.entity.RemainRedPacket;
+import com.myava.springboot.domain.RedPacketReceive;
+import com.myava.springboot.domain.RemainRedPacket;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package com.myava.springboot.entity;
+package com.myava.springboot.domain;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +7,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * 红包信息对象
+ *
+ * @author biao
+ */
 @Data
 @Builder
 public class RedPacketInfo implements Serializable {

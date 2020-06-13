@@ -5,6 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 红包算法
+ *
+ * @author biao
+ */
 public class RedPacketAlgorithm {
 
     /**
@@ -68,6 +73,4 @@ public class RedPacketAlgorithm {
         System.out.println(line_cut(10000, 10));
         System.out.println(divideRedPackage(10000, 10));
     }
-
-
 }

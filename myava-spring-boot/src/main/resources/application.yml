@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8080
 
 logging:
   config: classpath:logback-spring.xml
@@ -56,6 +56,12 @@ spring.thymeleaf:
   encoding: UTF-8
   cache: false
   servlet.content-type: text/html
+
+swagger:
+  title: API接口文档
+  description: API描述
+  version: 1.0
+  base-package: com.myava.springboot.controller
 
 #regCenter:
 #  serverList: 127.0.0.1:2181
