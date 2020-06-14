@@ -55,14 +55,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //	}
 	
 	/**
-	 * failFast：true 快速失败返回模式 false 普通模式
+	 * failFast：true-快速失败返回模式，false-普通模式
 	 * @return
 	 */
 //	@Bean
 //	public Validator validator() {
 //		ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
 //				.configure()
-//				.failFast(false)
+//				.failFast(true)
 //				.buildValidatorFactory();
 //		Validator validator = validatorFactory.getValidator();
 //		return validator;

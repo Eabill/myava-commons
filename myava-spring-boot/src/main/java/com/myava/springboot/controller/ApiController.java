@@ -8,6 +8,7 @@ import com.myava.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ public class ApiController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public RespResult<UserResponse> list() {
         return RespResult.success(new UserResponse(userService.selectAll()));
     }
@@ -37,7 +38,7 @@ public class ApiController {
         return RespResult.success(userService.get(id));
     }
 
-    @RequestMapping(value = "/query")
+    @PostMapping(value = "/query")
     public RespResult<UserResponse> query(@Validated @RequestBody UserRequest request) {
         return RespResult.success(new UserResponse(userService.query(request)));
     }

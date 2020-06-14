@@ -14,11 +14,11 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,9 +44,9 @@ public class RedPacketController {
         redPacketScript.setLocation(new ClassPathResource("script/red-packet.lua"));
     }
 
-    @RequestMapping("/redPacket/init")
+    @RequestMapping(value = "/redPacket/init", method = RequestMethod.GET)
     @ResponseBody
-    public String initRedPacket(String totalAmt, int totalNum) throws ParseException {
+    public String initRedPacket(String totalAmt, int totalNum) {
         Date now = new Date();
         RedPacketInfo info = RedPacketInfo.builder()
                 .id(1L)
@@ -92,7 +92,7 @@ public class RedPacketController {
         return "init redPacket success";
     }
 
-    @RequestMapping("/redPacket/dis")
+    @RequestMapping(value = "/redPacket/dis", method = RequestMethod.GET)
     @ResponseBody
     public void redPacket(long redPacketId, long userId) {
 
@@ -112,7 +112,7 @@ public class RedPacketController {
         System.out.println("remainRedPacket: " + remainRedPacket);
     }
 
-    @RequestMapping("/redPacket/dis/lock")
+    @RequestMapping(value = "/redPacket/dis/lock", method = RequestMethod.GET)
     @ResponseBody
     public void redPacketLock(long redPacketId, long userId) {
         RedisLock redisLock = new RedisLock("market:redPacket:" + redPacketId);
